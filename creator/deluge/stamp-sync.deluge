@@ -1,0 +1,4 @@
+if(zoho.loginuserid == "replace-with-sync-user@example.com" && input.Sync_Status == "Synced")
+{
+	input.Last_Synced_At = zoho.currenttime;
+}

@@ -1,0 +1,14 @@
+if(!input.Masked_Node_ID.matches("NODE-[A-Z]{2}-[0-9]{2}"))
+{
+	alert "Enter a masked node ID in the required format.";
+	cancel submit;
+}
+if(input.ID != null)
+{
+	existing = Plant_Master[ID == input.ID];
+	if(existing.Masked_Node_ID != input.Masked_Node_ID)
+	{
+		alert "The masked node ID is immutable.";
+		cancel submit;
+	}
+}

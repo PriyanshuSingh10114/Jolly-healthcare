@@ -1,0 +1,11 @@
+formulation = Formulations[ID == input.Formulation_Reference];
+if(formulation.count() != 1 || formulation.Masked_Node_ID != input.Masked_Node_ID)
+{
+	alert "Select the formulation that owns this masked node.";
+	cancel submit;
+}
+if(input.Target_Quantity == null || input.Target_Quantity < 1)
+{
+	alert "Target quantity must be a positive whole number.";
+	cancel submit;
+}

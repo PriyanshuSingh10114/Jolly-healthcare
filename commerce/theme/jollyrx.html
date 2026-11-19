@@ -1,0 +1,43 @@
+<section class="jrx" data-jollyrx data-api="__JOLLYRX_API__">
+  <nav class="jrx-nav" aria-label="JollyRx">
+    <a href="#jrx-top" class="jrx-brand">Jolly<span>Rx</span></a>
+    <a href="#jrx-catalog">Browse formulations</a>
+    <a href="#jrx-process">How it works</a>
+  </nav>
+  <div class="jrx-hero" id="jrx-top">
+    <p class="jrx-kicker">Pharmaceutical contract manufacturing</p>
+    <h1>Find the right manufacturing capability.</h1>
+    <p>Compare dosage forms, certifications, and minimum order quantities, then request a quote using a masked manufacturer ID.</p>
+    <a class="jrx-button" href="#jrx-catalog">Browse catalog</a>
+  </div>
+  <section class="jrx-section" id="jrx-catalog">
+    <h2>Formulations</h2>
+    <p data-catalog-status role="status">Loading formulations…</p>
+    <div class="jrx-grid" data-catalog></div>
+  </section>
+  <section class="jrx-section jrx-process" id="jrx-process">
+    <h2>How it works</h2>
+    <ol>
+      <li>Explore masked manufacturing capabilities.</li>
+      <li>Select a formulation.</li>
+      <li>Submit a request for quotation.</li>
+      <li>Receive a follow-up from JollyRx.</li>
+    </ol>
+  </section>
+  <footer class="jrx-section">JollyRx · Demonstration catalog. Manufacturer records and certification claims are fictional.</footer>
+  <dialog class="jrx-dialog" aria-labelledby="jrx-dialog-title">
+    <form data-rfq>
+      <div class="jrx-dialog-head">
+        <h2 id="jrx-dialog-title">Request a quote</h2>
+        <button type="button" data-close aria-label="Close request form">×</button>
+      </div>
+      <label>Masked Node ID <input name="node" readonly></label>
+      <label>Buyer name <input name="name" autocomplete="name" required maxlength="100"></label>
+      <label>Buyer email <input type="email" name="email" autocomplete="email" required maxlength="254"></label>
+      <label>Target quantity <input type="number" name="quantity" required min="1" max="999999999" step="1" inputmode="numeric"></label>
+      <div hidden><label>Leave blank <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <p data-rfq-status role="status" aria-live="polite"></p>
+      <button type="submit" class="jrx-button">Send request</button>
+    </form>
+  </dialog>
+</section>

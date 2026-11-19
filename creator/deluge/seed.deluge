@@ -1,0 +1,96 @@
+void seed_demo()
+{
+	node = "NODE-BD-01";
+	plants = Plant_Master[Masked_Node_ID == node];
+	if(plants.count() == 0)
+	{
+		plantId = insert into Plant_Master
+		[
+			Added_User = zoho.loginuser
+			Real_Plant_Name = "Demo Biopharma Manufacturing Unit"
+			Factory_Address = "Fictional Industrial Estate, Baddi, Himachal Pradesh"
+			Drug_Licence_Number = "DEMO-LIC-001"
+			Masked_Node_ID = node
+		];
+	}
+	else
+	{
+		plantId = plants.ID;
+	}
+	if(Formulations[Masked_Node_ID == node].count() == 0)
+	{
+		insert into Formulations
+		[
+			Added_User = zoho.loginuser
+			Plant_Reference = plantId
+			Masked_Node_ID = node
+			Molecule = "Paracetamol"
+			Dosage_Form = "Tablets"
+			Certification = "WHO-GMP"
+			MOQ = 50000
+			Sync_Status = "Pending"
+		];
+	}
+	node = "NODE-GJ-02";
+	plants = Plant_Master[Masked_Node_ID == node];
+	if(plants.count() == 0)
+	{
+		plantId = insert into Plant_Master
+		[
+			Added_User = zoho.loginuser
+			Real_Plant_Name = "Sample Gujarat Formulations"
+			Factory_Address = "Fictional Pharma Zone, Ahmedabad, Gujarat"
+			Drug_Licence_Number = "DEMO-LIC-002"
+			Masked_Node_ID = node
+		];
+	}
+	else
+	{
+		plantId = plants.ID;
+	}
+	if(Formulations[Masked_Node_ID == node].count() == 0)
+	{
+		insert into Formulations
+		[
+			Added_User = zoho.loginuser
+			Plant_Reference = plantId
+			Masked_Node_ID = node
+			Molecule = "Amoxicillin"
+			Dosage_Form = "Capsules"
+			Certification = "Schedule M"
+			MOQ = 25000
+			Sync_Status = "Pending"
+		];
+	}
+	node = "NODE-MH-03";
+	plants = Plant_Master[Masked_Node_ID == node];
+	if(plants.count() == 0)
+	{
+		plantId = insert into Plant_Master
+		[
+			Added_User = zoho.loginuser
+			Real_Plant_Name = "Prototype Maharashtra Lifesciences"
+			Factory_Address = "Fictional Manufacturing Park, Pune, Maharashtra"
+			Drug_Licence_Number = "DEMO-LIC-003"
+			Masked_Node_ID = node
+		];
+	}
+	else
+	{
+		plantId = plants.ID;
+	}
+	if(Formulations[Masked_Node_ID == node].count() == 0)
+	{
+		insert into Formulations
+		[
+			Added_User = zoho.loginuser
+			Plant_Reference = plantId
+			Masked_Node_ID = node
+			Molecule = "Ceftriaxone"
+			Dosage_Form = "Injectables"
+			Certification = "WHO-GMP"
+			MOQ = 10000
+			Sync_Status = "Pending"
+		];
+	}
+}

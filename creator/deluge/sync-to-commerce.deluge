@@ -1,0 +1,124 @@
+// Deluge Custom Function: sync_formulation_to_commerce
+// Connection: "zohocommerce_conn" (Scopes: ZohoCommerce.items.CREATE, ZohoCommerce.items.UPDATE)
+// Org Header: X-com-zoho-store-organizationid
+//
+// Synchronizes an authorized Creator formulation to Zoho Commerce with strict field allowlisting.
+// Confidential manufacturer identities, addresses, licences, and molecules are never included.
+
+void sync_formulation_to_commerce(int formulationId, string storeOrgId, string commerceDomain)
+{
+	formulation = Formulations[ID == formulationId];
+	if(formulation.count() != 1)
+	{
+		info "Formulation record not found: " + formulationId;
+		return;
+	}
+	
+	nodeId = formulation.Masked_Node_ID;
+	dosage = formulation.Dosage_Form;
+	cert = formulation.Certification;
+	moq = formulation.MOQ;
+	existingProductId = formulation.Commerce_Product_ID;
+	
+	// Enforce strict public allowlist
+	desc = "Dosage form: " + dosage + " | Certification: " + cert + " | MOQ: " + moq;
+	
+	headers = Map();
+	headers.put("X-com-zoho-store-organizationid", storeOrgId);
+	headers.put("Content-Type", "application/json");
+	
+	payload = Map();
+	payload.put("name", nodeId);
+	payload.put("url", nodeId.toLowerCase());
+	payload.put("product_short_description", desc);
+	payload.put("product_description", "<p>" + desc + "</p>");
+	
+	operation = "Create";
+	isUpdate = false;
+	
+	if(existingProductId != null && existingProductId.trim() != "")
+	{
+		isUpdate = true;
+		operation = "Update";
+	}
+	else
+	{
+		// Initial product creation requires variant definition with masked SKU
+		payload.put("variant_type", "inventory");
+		payload.put("show_in_storefront", false);
+		
+		variants = List();
+		varMap = Map();
+		varMap.put("sku", nodeId);
+		varMap.put("rate", "1");
+		varMap.put("initial_stock", "0");
+		variants.add(varMap);
+		payload.put("variants", variants);
+		
+		// Update status to Creating to prevent concurrent sync collisions
+		formulation.Sync_Status = "Creating";
+	}
+	
+	endpoint = commerceDomain + "/store/api/v1/products";
+	if(isUpdate)
+	{
+		endpoint = endpoint + "/" + existingProductId;
+	}
+	
+	// Execute authenticated HTTP request via Creator Connection
+	response = invokeurl
+	[
+		url : endpoint
+		type : if(isUpdate, "PUT", "POST")
+		parameters : payload.toString()
+		headers : headers
+		connection : "zohocommerce_conn"
+	];
+	
+	status = "Error";
+	errMsg = "";
+	
+	if(response != null && response.get("code") == 0)
+	{
+		status = "Synced";
+		newProdId = existingProductId;
+		if(!isUpdate)
+		{
+			productObj = response.get("product");
+			if(productObj != null)
+			{
+				newProdId = productObj.get("product_id").toString();
+			}
+		}
+		
+		formulation.Commerce_Product_ID = newProdId;
+		formulation.Sync_Status = "Synced";
+		formulation.Last_Synced_At = zoho.currenttime;
+	}
+	else
+	{
+		formulation.Sync_Status = "Error";
+		errMsg = if(response != null, response.get("message"), "Unknown connection error");
+		info "Sync failed for " + nodeId + ": " + errMsg;
+	}
+	
+	// Persist audit trail in Sync_Logs
+	insert into Sync_Logs
+	[
+		Added_User = zoho.loginuser
+		Masked_Node_ID = nodeId
+		Operation = operation
+		Status = status
+		Error_Message = errMsg
+	];
+}
+
+// Bulk synchronization function for all pending or error formulations
+void sync_all_pending_formulations(string storeOrgId, string commerceDomain)
+{
+	records = Formulations[Sync_Status in {"Pending", "Error"}];
+	for each rec in records
+	{
+		thisapp.sync_formulation_to_commerce(rec.ID, storeOrgId, commerceDomain);
+	}
+}

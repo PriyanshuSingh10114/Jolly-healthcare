@@ -1,0 +1,4 @@
+Real_Plant_Name,Factory_Address,Drug_Licence_Number,Masked_Node_ID,Molecule,Dosage_Form,Certification,MOQ
+Demo Biopharma Manufacturing Unit,"Fictional Industrial Estate, Baddi, Himachal Pradesh",DEMO-LIC-001,NODE-BD-01,Paracetamol,Tablets,WHO-GMP,50000
+Sample Gujarat Formulations,"Fictional Pharma Zone, Ahmedabad, Gujarat",DEMO-LIC-002,NODE-GJ-02,Amoxicillin,Capsules,Schedule M,25000
+Prototype Maharashtra Lifesciences,"Fictional Manufacturing Park, Pune, Maharashtra",DEMO-LIC-003,NODE-MH-03,Ceftriaxone,Injectables,WHO-GMP,10000

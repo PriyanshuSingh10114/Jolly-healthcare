@@ -1,0 +1,13 @@
+{
+  "name": "jollyrx-integration",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node --env-file=.env src/server.js",
+    "sync": "node --env-file=.env src/sync.js",
+    "test": "node --test"
+  }
+}

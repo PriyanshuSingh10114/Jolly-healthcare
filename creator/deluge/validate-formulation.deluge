@@ -1,0 +1,20 @@
+plant = Plant_Master[ID == input.Plant_Reference];
+if(plant.count() != 1 || plant.Masked_Node_ID != input.Masked_Node_ID)
+{
+	alert "Select the plant that owns this masked node.";
+	cancel submit;
+}
+if(input.ID != null)
+{
+	existing = Formulations[ID == input.ID];
+	if(existing.Masked_Node_ID != input.Masked_Node_ID)
+	{
+		alert "The masked node ID is immutable.";
+		cancel submit;
+	}
+}
+if(input.MOQ == null || input.MOQ < 1)
+{
+	alert "MOQ must be a positive whole number.";
+	cancel submit;
+}
